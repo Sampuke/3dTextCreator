@@ -11,22 +11,26 @@ CreateThread(function()
         local sleep = 3000
         local pC = GetEntityCoords(PlayerPedId())
         -- Iterate through server-side 3D text and add them to the render list if they are within range
-        for i = 1, #GlobalState.server3dText do
-            local textDistance = #(GlobalState.server3dText[i].coords - pC)
-            if textDistance <= 30 then
-                if textDistance <= GlobalState.server3dText[i].dist then
-                    render = true
-                    rendText[#rendText+1] = GlobalState.server3dText[i]
+        if GlobalState.server3dText and type(GlobalState.server3dText) == "table" then
+            for i = 1, #GlobalState.server3dText do
+                local textDistance = #(GlobalState.server3dText[i].coords - pC)
+                if textDistance <= 30 then
+                    if textDistance <= GlobalState.server3dText[i].dist then
+                        render = true
+                        rendText[#rendText+1] = GlobalState.server3dText[i]
+                    end
                 end
             end
         end
-        for i = 1, #CLIENTTEXT do
-            -- Iterate through client-side 3D text and add them to the render list if they are within range
-            local textDistance = #(CLIENTTEXT[i].coords - pC)
-            if textDistance <= 30 then
-                if textDistance <= CLIENTTEXT[i].dist then
-                    render = true
-                    rendText[#rendText+1] = CLIENTTEXT[i]
+        if CLIENTTEXT and type(CLIENTTEXT) == "table" then
+            for i = 1, #CLIENTTEXT do
+                -- Iterate through client-side 3D text and add them to the render list if they are within range
+                local textDistance = #(CLIENTTEXT[i].coords - pC)
+                if textDistance <= 30 then
+                    if textDistance <= CLIENTTEXT[i].dist then
+                        render = true
+                        rendText[#rendText+1] = CLIENTTEXT[i]
+                    end
                 end
             end
         end
