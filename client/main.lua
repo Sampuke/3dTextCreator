@@ -7,7 +7,7 @@ local render, rendText = false, {}
 -- Create a thread to handle rendering and updating 3D text
 CreateThread(function()
     while LOADED_IN do
-        local sleep = 1000
+        local sleep = 3000
         local pC = GetEntityCoords(PlayerPedId())
         -- Iterate through server-side 3D text and add them to the render list if they are within range
         for i = 1, #GlobalState.server3dText do
@@ -17,8 +17,6 @@ CreateThread(function()
                     render = true
                     rendText[#rendText+1] = GlobalState.server3dText[i]
                 end
-            else
-
             end
         end
         for i = 1, #CLIENTTEXT do
@@ -27,9 +25,7 @@ CreateThread(function()
             if textDistance <= 30 then
                 if textDistance <= CLIENTTEXT[i].dist then
                     render = true
-                    local newNumber = #rendText+1
-                    rendText[newNumber] = CLIENTTEXT[i]
-                    CLIENTTEXT[i].renderNumber = newNumber
+                    rendText[#rendText+1] = CLIENTTEXT[i]
                 end
             end
         end
@@ -39,7 +35,7 @@ end)
 -- Create a thread to render the 3D text
 Citizen.CreateThread(function()
     while LOADED_IN do
-        local sleep = 1500
+        local sleep = 2500
         if render then
             if #rendText <= 0 then
                 render = false
