@@ -11,7 +11,7 @@ CreateThread(function()
         local sleep = 3000
         local pC = GetEntityCoords(PlayerPedId())
         -- Iterate through server-side 3D text and add them to the render list if they are within range
-        if GlobalState.server3dText and type(GlobalState.server3dText) == "table" then
+        if GlobalState.server3dText and type(GlobalState.server3dText) == "table" and next(GlobalState.server3dText) then
             for i = 1, #GlobalState.server3dText do
                 local textDistance = #(GlobalState.server3dText[i].coords - pC)
                 if textDistance <= 30 then
@@ -22,7 +22,7 @@ CreateThread(function()
                 end
             end
         end
-        if CLIENTTEXT and type(CLIENTTEXT) == "table" then
+        if CLIENTTEXT and type(CLIENTTEXT) == "table" and next(CLIENTTEXT) then
             for i = 1, #CLIENTTEXT do
                 -- Iterate through client-side 3D text and add them to the render list if they are within range
                 local textDistance = #(CLIENTTEXT[i].coords - pC)
