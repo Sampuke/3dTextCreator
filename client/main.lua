@@ -1,6 +1,6 @@
 -- FOR CHECKING IF PLAYER HAS LOADED IN TO THE GODDANM GAME
 LOADED_IN = false
--- Global variables for storing created text, client-side text, and miscellaneous variables
+-- Global variable for storing client-side text
 CLIENTTEXT = {}
 -- Local variables for rendering text
 local render, rendText = false, {}
@@ -11,21 +11,29 @@ CreateThread(function()
         local pC = GetEntityCoords(PlayerPedId())
         -- Iterate through server-side 3D text and add them to the render list if they are within range
         for i = 1, #GlobalState.server3dText do
-            local textDistance = #(GlobalState.server3dText[i].coords- pC)
+            local textDistance = #(GlobalState.server3dText[i].coords - pC)
             if textDistance <= 30 then
                 if textDistance <= GlobalState.server3dText[i].dist then
                     render = true
                     rendText[#rendText+1] = GlobalState.server3dText[i]
                 end
+            else
+                
             end
         end
         for i = 1, #CLIENTTEXT do
             -- Iterate through client-side 3D text and add them to the render list if they are within range
-            local textDistance = #(CLIENTTEXT[i].coords- pC)
+            local textDistance = #(CLIENTTEXT[i].coords - pC)
             if textDistance <= 30 then
                 if textDistance <= CLIENTTEXT[i].dist then
                     render = true
-                    rendText[#rendText+1] = CLIENTTEXT[i]
+                    local newNumber = #rendText+1
+                    rendText[newNumber] = CLIENTTEXT[i]
+                    CLIENTTEXT[i].renderNumber = newNumber
+                end
+            else
+                if rendText[CLIENTTEXT[i].renderNumber] then
+                    table.remove(rendText, CLIENTTEXT[i].renderNumber)
                 end
             end
         end
@@ -35,7 +43,12 @@ end)
 -- Create a thread to render the 3D text
 Citizen.CreateThread(function()
     while LOADED_IN do
+        local sleep = 1500
         if render then
+            if #rendText <= 0 then
+                render = false
+                goto skip
+            end
             for i = 1, #rendText do
                 local text = rendText[i]
                 local label = string.gsub(text.label,"\n", "~n~")
@@ -48,9 +61,10 @@ Citizen.CreateThread(function()
                 end
                 Draw3DText(text.coords.x, text.coords.y, text.coords.z, text.scale, label, color)
             end
-            Wait(0)
+            sleep = 0
         end
-        Wait(1500)
+        ::skip::
+        Wait(sleep)
     end
 end)
 -- Registering Exports
