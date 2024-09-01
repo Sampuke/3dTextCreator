@@ -18,7 +18,7 @@ CreateThread(function()
                     rendText[#rendText+1] = GlobalState.server3dText[i]
                 end
             else
-                
+
             end
         end
         for i = 1, #CLIENTTEXT do
@@ -30,10 +30,6 @@ CreateThread(function()
                     local newNumber = #rendText+1
                     rendText[newNumber] = CLIENTTEXT[i]
                     CLIENTTEXT[i].renderNumber = newNumber
-                end
-            else
-                if rendText[CLIENTTEXT[i].renderNumber] then
-                    table.remove(rendText, CLIENTTEXT[i].renderNumber)
                 end
             end
         end
@@ -49,8 +45,14 @@ Citizen.CreateThread(function()
                 render = false
                 goto skip
             end
+            local pC = GetEntityCoords(PlayerPedId())
             for i = 1, #rendText do
                 local text = rendText[i]
+                local textDistance = #(text.coords - pC)
+                if textDistance > 30 then
+                    table.remove(rendText, i)
+                    goto skipRender
+                end
                 local label = string.gsub(text.label,"\n", "~n~")
                 local color = {}
                 -- Check if color is a hexadecimal string and convert it to RGB
@@ -60,6 +62,10 @@ Citizen.CreateThread(function()
                     color = {r = text.color[1], g = text.color[2], b = text.color[3], a = text.color[4] or 255}
                 end
                 Draw3DText(text.coords.x, text.coords.y, text.coords.z, text.scale, label, color)
+                ::skipRender::
+            end
+            if #rendText <= 0 then
+                render = false
             end
             sleep = 0
         end
