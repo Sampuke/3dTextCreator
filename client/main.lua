@@ -1,11 +1,8 @@
 -- FOR CHECKING IF PLAYER HAS LOADED IN TO THE GODDANM GAME
-
 LOADED_IN = false
-
-
-
 -- Global variables for storing created text, client-side text, and miscellaneous variables
-local createdText, clientText, findShit = {}, {}, {}
+CLIENTTEXT = {}
+-- Local variables for rendering text
 local render, rendText = false, {}
 -- Create a thread to handle rendering and updating 3D text
 CreateThread(function()
@@ -22,13 +19,13 @@ CreateThread(function()
                 end
             end
         end
-        for i = 1, #clientText do
+        for i = 1, #CLIENTTEXT do
             -- Iterate through client-side 3D text and add them to the render list if they are within range
-            local textDistance = #(clientText[i].coords- pC)
+            local textDistance = #(CLIENTTEXT[i].coords- pC)
             if textDistance <= 30 then
-                if textDistance <= clientText[i].dist then
+                if textDistance <= CLIENTTEXT[i].dist then
                     render = true
-                    rendText[#rendText+1] = clientText[i]
+                    rendText[#rendText+1] = CLIENTTEXT[i]
                 end
             end
         end

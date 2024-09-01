@@ -35,8 +35,8 @@ end
 
 -- Function to add a 3D text to the client-side list
 function addText(label, x, y, z, color, dist, scale, font)
-    local textNum = #clientText+1
-    clientText[textNum] = {
+    local textNum = #CLIENTTEXT+1
+    CLIENTTEXT[textNum] = {
         label = label,
         coords = vector3(x, y, z),
         color = color or {r = 255, g = 255, b = 255},
@@ -50,23 +50,23 @@ end
 -- Function to update a 3D text in the client-side list
 function updateText(textNum, x,y,z, color, dist, scale, font)
     if x and y and z then
-        clientText[textNum].coords = vector3(x, y, z)
+        CLIENTTEXT[textNum].coords = vector3(x, y, z)
     end
     if color then
-        clientText[textNum].color = color or {r = 255, g = 255, b = 255}
+        CLIENTTEXT[textNum].color = color or {r = 255, g = 255, b = 255}
     end
     if dist then
-        clientText[textNum].dist = dist or 5
+        CLIENTTEXT[textNum].dist = dist or 5
     end
     if scale then
-        clientText[textNum].scale = scale or 0.7
+        CLIENTTEXT[textNum].scale = scale or 0.7
     end
     if font then
-        clientText[textNum].font = font or 0
+        CLIENTTEXT[textNum].font = font or 0
     end
 end
 
 -- Function to delete a 3D text from the client-side list
 function deleteText(textNum)
-    clientText[textNum] = {}
+    CLIENTTEXT[textNum] = {}
 end
