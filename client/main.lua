@@ -6,7 +6,7 @@ CLIENTTEXT = {}
 local render, rendText = false, {}
 -- Create a thread to handle rendering and updating 3D text
 CreateThread(function()
-    While not LOADED_IN do Wait(100) end
+    while not LOADED_IN do Wait(100) end
     while LOADED_IN do
         local sleep = 3000
         local pC = GetEntityCoords(PlayerPedId())
@@ -35,7 +35,7 @@ CreateThread(function()
 end)
 -- Create a thread to render the 3D text
 Citizen.CreateThread(function()
-    While not LOADED_IN do Wait(100) end
+    while not LOADED_IN do Wait(100) end
     while LOADED_IN do
         local sleep = 2500
         if render then
